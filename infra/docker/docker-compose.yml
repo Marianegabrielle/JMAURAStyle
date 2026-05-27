@@ -1,17 +1,22 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:15
     container_name: jmaurastyle_db
     environment:
       POSTGRES_USER: jmaura
-      POSTGRES_PASSWORD: jmaura2026
+      POSTGRES_PASSWORD: pass123
       POSTGRES_DB: jmaurastyle
+      POSTGRES_HOST_AUTH_METHOD: trust
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: jmaurastyle_redis
+    ports:
+      - "6379:6379"
 
   minio:
     image: minio/minio
@@ -26,11 +31,19 @@ services:
     volumes:
       - minio_data:/data
 
-  redis:
-    image: redis:7-alpine
-    container_name: jmaurastyle_redis
+  backend:
+    build:
+      context: ../../backend
+      dockerfile: Dockerfile
+    container_name: jmaurastyle_backend
+    volumes:
+      - ../../backend:/app
     ports:
-      - "6379:6379"
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg2://jmaura:pass123@postgres:5432/jmaurastyle
+    depends_on:
+      - postgres
 
 volumes:
   postgres_data:
