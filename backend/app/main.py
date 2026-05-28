@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.database import engine, Base
-from app.routers import auth, clothing, weather, outfit
+from app.routers import auth, clothing, weather, outfit, profile
 
 app = FastAPI(
     title="JmauraStyle API",
@@ -25,6 +25,7 @@ app.include_router(auth.router)
 app.include_router(clothing.router)
 app.include_router(weather.router)
 app.include_router(outfit.router)
+app.include_router(profile.router)
 
 @app.get("/health")
 async def health_check():
