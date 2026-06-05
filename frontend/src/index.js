@@ -4,12 +4,11 @@ import '@fontsource/inter/700.css';
 import '@fontsource/inter/900.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import App from './app/App';
 import './index.css';
-import App from './App';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
+ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>
+  </React.StrictMode>,
 );
