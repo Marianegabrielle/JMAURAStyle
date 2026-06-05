@@ -1,17 +1,11 @@
 pipeline {
     agent any
 
-    environment {
-        DOCKER_COMPOSE = 'docker compose'
-        APP_DIR = '/root/JMAURAStyle'
-    }
-
     stages {
         stage('Checkout') {
             steps {
                 echo 'Clonage du code source...'
-                git branch: 'main',
-                    url: 'https://github.com/Marianegabrielle/JMAURAStyle.git'
+                checkout scm
             }
         }
 
@@ -19,7 +13,7 @@ pipeline {
             steps {
                 echo 'Construction des images Docker...'
                 sh '''
-                    cd ${APP_DIR}/infra/docker
+                    cd infra/docker
                     docker compose build --no-cache
                 '''
             }
@@ -29,11 +23,12 @@ pipeline {
             steps {
                 echo 'Lancement des tests...'
                 sh '''
-                    cd ${APP_DIR}
+                    cd backend
                     docker run --rm \
-                        -e DATABASE_URL=postgresql+psycopg2://jmaura:jmaura2026@postgres:5432/jmaurastyle \
-                        docker-backend \
-                        python -m pytest app/ -v --tb=short || true
+                        -v $(pwd):/app \
+                        -w /app \
+                        python:3.11-slim \
+                        sh -c "pip install -r requirements.txt -q && python -m pytest app/ -v --tb=short || true"
                 '''
             }
         }
@@ -42,7 +37,7 @@ pipeline {
             steps {
                 echo 'Déploiement...'
                 sh '''
-                    cd ${APP_DIR}/infra/docker
+                    cd infra/docker
                     docker compose down
                     docker compose up -d --build
                 '''
