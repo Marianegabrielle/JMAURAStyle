@@ -1,0 +1,23 @@
+---
+- name: Start JmauraStyle services
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Start all containers
+      shell: cd /root/JMAURAStyle/infra/docker && docker compose up -d
+      register: result
+
+    - name: Show result
+      debug:
+        msg: "{{ result.stdout }}"
+
+    - name: Check backend is running
+      uri:
+        url: http://localhost:8000/docs
+        status_code: 200
+      register: health_check
+
+    - name: Backend status
+      debug:
+        msg: "Backend is UP"
+      when: health_check.status == 200

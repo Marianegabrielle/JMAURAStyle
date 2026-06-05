@@ -1,5 +1,4 @@
 from sqlalchemy import Column, String, DateTime, ForeignKey, Enum
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 import uuid
@@ -20,11 +19,11 @@ class GeneratedByEnum(str, enum.Enum):
 class Outfit(Base):
     __tablename__ = "outfits"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
-    top_id = Column(UUID(as_uuid=True), ForeignKey("clothes.id"), nullable=True)
-    bottom_id = Column(UUID(as_uuid=True), ForeignKey("clothes.id"), nullable=True)
-    shoes_id = Column(UUID(as_uuid=True), ForeignKey("clothes.id"), nullable=True)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    user_id = Column(String(36), ForeignKey("users.id"), nullable=False)
+    top_id = Column(String(36), ForeignKey("clothes.id"), nullable=True)
+    bottom_id = Column(String(36), ForeignKey("clothes.id"), nullable=True)
+    shoes_id = Column(String(36), ForeignKey("clothes.id"), nullable=True)
     event_type = Column(Enum(EventTypeEnum), nullable=False)
     generated_by = Column(Enum(GeneratedByEnum), default=GeneratedByEnum.ai)
     weather_desc = Column(String, nullable=True)

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jmaurastyle-backend
+  labels:
+    app: jmaurastyle-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: jmaurastyle-backend
+  template:
+    metadata:
+      labels:
+        app: jmaurastyle-backend
+    spec:
+      containers:
+      - name: backend
+        image: python:3.11-slim
+        ports:
+        - containerPort: 8000
+        env:
+        - name: DATABASE_URL
+          value: "postgresql+psycopg2://jmaura:jmaura2026@postgres:5432/jmaurastyle"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jmaurastyle-backend
+spec:
+  selector:
+    app: jmaurastyle-backend
+  ports:
+  - port: 8000
+    targetPort: 8000
+  type: ClusterIP

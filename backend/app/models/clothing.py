@@ -1,5 +1,5 @@
 from sqlalchemy import Column, String, Boolean, DateTime, ForeignKey, Enum
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import String as UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 import uuid
@@ -15,8 +15,8 @@ class CategoryEnum(str, enum.Enum):
 class Clothing(Base):
     __tablename__ = "clothes"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
+    id = Column(UUID(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    user_id = Column(UUID(36), ForeignKey("users.id"), nullable=False)
     name = Column(String, nullable=False)
     category = Column(Enum(CategoryEnum), nullable=False)
     color = Column(String, nullable=False)
