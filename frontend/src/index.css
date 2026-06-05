@@ -2,17 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+html, body, #root {
+  height: 100%;
 }
 
 body {
-  font-family: 'Inter', sans-serif;
-  background-color: #FFFFFF;
-  color: #0A0A0A;
-  max-width: 430px;
-  margin: 0 auto;
-  min-height: 100vh;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background-color: #2C1810;
+}
+
+.app-shell { min-height: 100vh }
+
+/* Custom dark brown theme */
+:root {
+  --brown-dark: #2C1810;
+  --brown-medium: #3E2723;
+  --brown-light: #4E342E;
+  --brown-warm: #5D4037;
+  --brown-accent: #8D6E63;
+  --brown-gold: #A1887F;
+  --amber-glow: #D4A373;
 }
