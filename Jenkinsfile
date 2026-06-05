@@ -8,7 +8,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'cd infra/docker && docker compose build'
+                sh 'cd infra/docker && docker-compose build'
             }
         }
         stage('Test') {
@@ -18,12 +18,12 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sh 'cd infra/docker && docker compose down && docker compose up -d'
+                sh 'cd infra/docker && docker-compose down && docker-compose up -d'
             }
         }
     }
     post {
         success { echo 'Pipeline OK !' }
-        failure { echo 'Pipeline échoué.' }
+        failure { echo 'Pipeline echoue.' }
     }
 }
