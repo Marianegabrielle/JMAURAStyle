@@ -1,0 +1,30 @@
+---
+- name: Install JmauraStyle dependencies
+  hosts: localhost
+  connection: local
+  become: yes
+  tasks:
+    - name: Install required packages
+      apt:
+        name:
+          - curl
+          - git
+          - docker-compose
+          - python3-pip
+          - ansible
+        state: present
+        update_cache: no
+
+    - name: Ensure Docker is running
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Check Docker version
+      command: docker --version
+      register: docker_version
+
+    - name: Show Docker version
+      debug:
+        msg: "{{ docker_version.stdout }}"
